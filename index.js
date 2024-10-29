@@ -1,7 +1,11 @@
-require("dotenv").config();
-const express = require("express");
-const cors = require("cors");
-const mongoose = require("mongoose");
+import dotenv from "dotenv";
+import express from "express";
+import cors from "cors";
+import mongoose from "mongoose";
+import barangayRoute from "./routes/barangays-route.js"
+import peopleRoute from "./routes/people-route.js"
+
+dotenv.config();
 
 const app = express();
 app.use(cors());
@@ -20,3 +24,6 @@ mongoose
   .connect(process.env.MONGODB_URL)
   .then(() => console.log("CONNECTED TO MONGODB"))
   .catch((err) => console.error("Failed to connect to MongoDB:", err));
+
+app.use("/barangay", barangayRoute);
+app.use("/people", peopleRoute);
