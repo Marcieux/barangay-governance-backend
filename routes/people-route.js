@@ -15,4 +15,21 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.put("/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { number } = req.body;
+    const updatedPerson = await People.findByIdAndUpdate(
+      id,
+      { number },
+      { new: true }
+    );
+    res.json(updatedPerson);
+  } catch (err) {
+    console.error("Error updating number:", err);
+    res.status(500).json({ message: "Failed to update number", error: err.message });
+  }
+});
+
+
 export default router;
