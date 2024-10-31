@@ -18,12 +18,12 @@ router.get("/", async (req, res) => {
 // Update a specific barangay's king
 router.put("/:barangayName", async (req, res) => {
   const { barangayName } = req.params;
-  const { king, king_name } = req.body;
+  const { king_id, king_name } = req.body;
 
   try {
     const updatedBarangay = await Barangay.findOneAndUpdate(
       { barangay_name: barangayName },
-      { king, king_name },
+      { king_id, king_name },
       { new: true, upsert: false }
     );
 
