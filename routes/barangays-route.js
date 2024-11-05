@@ -5,7 +5,6 @@ const router = express.Router();
 router.get("/", async (req, res) => {
   try {
     const barangay = await Barangay.find();
-    console.log("Fetched barangays:", barangay);
     res.json(barangay);
   } catch (err) {
     console.error("Error retrieving barangays:", err);

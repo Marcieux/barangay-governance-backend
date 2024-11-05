@@ -5,10 +5,9 @@ const router = express.Router();
 router.get("/", async (req, res) => {
   try {
     const people = await People.find();
-    console.log("Fetched people:", people); // Log the fetched people
     res.json(people);
   } catch (err) {
-    console.error("Error retrieving people:", err); // Log error details
+    console.error("Error retrieving people:", err);
     res
       .status(500)
       .json({ message: "Failed to retrieve people", error: err.message });
@@ -18,18 +17,22 @@ router.get("/", async (req, res) => {
 router.put("/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const { number } = req.body;
-    const updatedPerson = await People.findByIdAndUpdate(
-      id,
-      { number },
-      { new: true }
-    );
+    const updateData = req.body;
+
+    const updatedPerson = await People.findByIdAndUpdate(id, updateData, {
+      new: true,
+    });
+    if (!updatedPerson) {
+      return res.status(404).json({ message: "Person not found" });
+    }
+
     res.json(updatedPerson);
   } catch (err) {
-    console.error("Error updating number:", err);
-    res.status(500).json({ message: "Failed to update number", error: err.message });
+    console.error("Error updating person:", err);
+    res
+      .status(500)
+      .json({ message: "Failed to update person", error: err.message });
   }
 });
-
 
 export default router;
