@@ -14,14 +14,13 @@ router.get("/", async (req, res) => {
   }
 });
 
-// Update a specific barangay's king
-router.put("/:barangayName", async (req, res) => {
-  const { barangayName } = req.params;
+router.put("/:id", async (req, res) => {
+  const { id } = req.params; 
   const { king_id, king_name } = req.body;
 
   try {
-    const updatedBarangay = await Barangay.findOneAndUpdate(
-      { barangay_name: barangayName },
+    const updatedBarangay = await Barangay.findByIdAndUpdate(
+      id, 
       { king_id, king_name },
       { new: true, upsert: false }
     );
