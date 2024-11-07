@@ -4,6 +4,7 @@ import cors from "cors";
 import mongoose from "mongoose";
 import barangayRoute from "./routes/barangays-route.js"
 import peopleRoute from "./routes/people-route.js"
+import princeRoute from "./routes/prince-route.js"
 
 dotenv.config();
 
@@ -27,3 +28,4 @@ mongoose
 
 app.use("/barangay", barangayRoute);
 app.use("/people", peopleRoute);
+app.use("/prince", princeRoute);

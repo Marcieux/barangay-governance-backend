@@ -15,12 +15,12 @@ router.get("/", async (req, res) => {
 });
 
 router.put("/:id", async (req, res) => {
-  const { id } = req.params; 
+  const { id } = req.params;
   const { king_id, king_name } = req.body;
 
   try {
     const updatedBarangay = await Barangay.findByIdAndUpdate(
-      id, 
+      id,
       { king_id, king_name },
       { new: true, upsert: false }
     );
@@ -35,6 +35,40 @@ router.put("/:id", async (req, res) => {
     res
       .status(500)
       .json({ message: "Failed to update king", error: err.message });
+  }
+});
+
+router.put("/:id/prince", async (req, res) => {
+  const { id } = req.params;
+  const { prince } = req.body;
+
+  if (!Array.isArray(prince) || prince.length === 0) {
+    return res
+      .status(400)
+      .json({ message: "Princes array is required and cannot be empty." });
+  }
+
+  try {
+    const updatedBarangay = await Barangay.findByIdAndUpdate(
+      id,
+      { $addToSet: { prince: { $each: prince } } },
+      { new: true }
+    );
+
+    if (!updatedBarangay) {
+      return res.status(404).json({ message: "Barangay not found" });
+    }
+
+    res.json({
+      message: "Princes added to barangay successfully",
+      barangay: updatedBarangay,
+    });
+  } catch (err) {
+    console.error("Error updating barangay with princes:", err);
+    res.status(500).json({
+      message: "Failed to update barangay with princes",
+      error: err.message,
+    });
   }
 });
 
