@@ -5,13 +5,13 @@ const router = express.Router();
 
 router.get("/", async (req, res) => {
   try {
-    const people = await Prince.find();
-    res.json(people);
+    const prince = await Prince.find();
+    res.json(prince);
   } catch (err) {
-    console.error("Error retrieving people:", err);
+    console.error("Error retrieving prince:", err);
     res
       .status(500)
-      .json({ message: "Failed to retrieve people", error: err.message });
+      .json({ message: "Failed to retrieve prince", error: err.message });
   }
 });
 

@@ -22,7 +22,7 @@ const princeSchema = new mongoose.Schema(
       default: null,
     },
     king_id: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
       required: true,
     },
   },
