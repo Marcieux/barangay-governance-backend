@@ -25,6 +25,7 @@ const princeSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       required: true,
     },
+    general: [{ type: mongoose.Schema.Types.ObjectId, ref: "General", required: true }]
   },
   { versionKey: false }
 );
