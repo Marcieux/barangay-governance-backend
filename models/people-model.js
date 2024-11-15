@@ -16,6 +16,10 @@ const peopleSchema = new mongoose.Schema({
     type: String,
     default: null,
   },
+  functionary: {
+    type: String,
+    default: null,
+  },
   precint: {
     type: String,
   },
