@@ -147,7 +147,7 @@ router.put("/:id/tagapamayapa", async (req, res) => {
   if (!Array.isArray(tagapamayapa) || tagapamayapa.length === 0) {
     return res
       .status(400)
-      .json({ message: "Purok Chair array is required and cannot be empty." });
+      .json({ message: "Tagapamayapa array is required and cannot be empty." });
   }
 
   try {
@@ -162,16 +162,185 @@ router.put("/:id/tagapamayapa", async (req, res) => {
     }
 
     res.json({
-      message: "Purok Chair added to barangay successfully",
+      message: "Tagapamayapa added to barangay successfully",
       barangay: updatedBarangay,
     });
   } catch (err) {
-    console.error("Error updating barangay with Purok Chair:", err);
+    console.error("Error updating barangay with Tagapamayapa:", err);
     res.status(500).json({
-      message: "Failed to update barangay with Purok Chair",
+      message: "Failed to update barangay with Tagapamayapa",
       error: err.message,
     });
   }
 });
 
+router.put("/:id/bhw", async (req, res) => {
+  const { id } = req.params;
+  const { bhw } = req.body;
+
+  if (!Array.isArray(bhw) || bhw.length === 0) {
+    return res
+      .status(400)
+      .json({ message: "Bhw array is required and cannot be empty." });
+  }
+
+  try {
+    const updatedBarangay = await Barangay.findByIdAndUpdate(
+      id,
+      { $addToSet: { bhw: { $each: bhw } } },
+      { new: true }
+    );
+
+    if (!updatedBarangay) {
+      return res.status(404).json({ message: "Barangay not found" });
+    }
+
+    res.json({
+      message: "Bhw added to barangay successfully",
+      barangay: updatedBarangay,
+    });
+  } catch (err) {
+    console.error("Error updating barangay with Bhw:", err);
+    res.status(500).json({
+      message: "Failed to update barangay with Bhw",
+      error: err.message,
+    });
+  }
+});
+
+router.put("/:id/tanod", async (req, res) => {
+  const { id } = req.params;
+  const { tanod } = req.body;
+
+  if (!Array.isArray(tanod) || tanod.length === 0) {
+    return res
+      .status(400)
+      .json({ message: "Tanod array is required and cannot be empty." });
+  }
+
+  try {
+    const updatedBarangay = await Barangay.findByIdAndUpdate(
+      id,
+      { $addToSet: { tanod: { $each: tanod } } },
+      { new: true }
+    );
+
+    if (!updatedBarangay) {
+      return res.status(404).json({ message: "Barangay not found" });
+    }
+
+    res.json({
+      message: "Tanod added to barangay successfully",
+      barangay: updatedBarangay,
+    });
+  } catch (err) {
+    console.error("Error updating barangay with Tanod:", err);
+    res.status(500).json({
+      message: "Failed to update barangay with Tanod",
+      error: err.message,
+    });
+  }
+});
+
+router.put("/:id/public-safety", async (req, res) => {
+  const { id } = req.params;
+  const { public_safety } = req.body;
+
+  if (!Array.isArray(public_safety) || public_safety.length === 0) {
+    return res
+      .status(400)
+      .json({ message: "Public Safety array is required and cannot be empty." });
+  }
+
+  try {
+    const updatedBarangay = await Barangay.findByIdAndUpdate(
+      id,
+      { $addToSet: { public_safety: { $each: public_safety } } },
+      { new: true }
+    );
+
+    if (!updatedBarangay) {
+      return res.status(404).json({ message: "Barangay not found" });
+    }
+
+    res.json({
+      message: "Public Safety added to barangay successfully",
+      barangay: updatedBarangay,
+    });
+  } catch (err) {
+    console.error("Error updating barangay with Public Safety:", err);
+    res.status(500).json({
+      message: "Failed to update barangay with Public Safety",
+      error: err.message,
+    });
+  }
+});
+
+router.put("/:id/bantay-dagat", async (req, res) => {
+  const { id } = req.params;
+  const { bantay_dagat } = req.body;
+
+  if (!Array.isArray(bantay_dagat) || bantay_dagat.length === 0) {
+    return res
+      .status(400)
+      .json({ message: "Bantay Dagat array is required and cannot be empty." });
+  }
+
+  try {
+    const updatedBarangay = await Barangay.findByIdAndUpdate(
+      id,
+      { $addToSet: { bantay_dagat: { $each: bantay_dagat } } },
+      { new: true }
+    );
+
+    if (!updatedBarangay) {
+      return res.status(404).json({ message: "Barangay not found" });
+    }
+
+    res.json({
+      message: "Bantay Dagat added to barangay successfully",
+      barangay: updatedBarangay,
+    });
+  } catch (err) {
+    console.error("Error updating barangay with Bantay Dagat:", err);
+    res.status(500).json({
+      message: "Failed to update barangay with Bantay Dagat",
+      error: err.message,
+    });
+  }
+});
+
+router.put("/:id/coastal", async (req, res) => {
+  const { id } = req.params;
+  const { coastal } = req.body;
+
+  if (!Array.isArray(coastal) || coastal.length === 0) {
+    return res
+      .status(400)
+      .json({ message: "Coastal Dagat array is required and cannot be empty." });
+  }
+
+  try {
+    const updatedBarangay = await Barangay.findByIdAndUpdate(
+      id,
+      { $addToSet: { coastal: { $each: coastal } } },
+      { new: true }
+    );
+
+    if (!updatedBarangay) {
+      return res.status(404).json({ message: "Barangay not found" });
+    }
+
+    res.json({
+      message: "Coastal added to barangay successfully",
+      barangay: updatedBarangay,
+    });
+  } catch (err) {
+    console.error("Error updating barangay with Coastal:", err);
+    res.status(500).json({
+      message: "Failed to update barangay with Coastal",
+      error: err.message,
+    });
+  }
+});
 export default router;
