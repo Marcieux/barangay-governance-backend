@@ -14,6 +14,28 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.get("/generals", async (req, res) => {
+  try {
+    const { barangay } = req.query;
+
+    if (!barangay) {
+      return res.status(400).json({ message: "Barangay name is required" });
+    }
+
+    const generalCount = await People.countDocuments({
+      barangay_name: { $regex: new RegExp(`^${barangay}$`, "i") },
+      role: "general",
+    });
+
+    res.json({ count: generalCount });
+  } catch (err) {
+    console.error("Error fetching generals count:", err);
+    res
+      .status(500)
+      .json({ message: "Failed to fetch generals count", error: err.message });
+  }
+});
+
 router.put("/:id", async (req, res) => {
   try {
     const { id } = req.params;
