@@ -6,7 +6,6 @@ const princeSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "People",
       required: true,
-      unique: true
     },
     prince_name: {
       type: String,
@@ -25,7 +24,7 @@ const princeSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       required: true,
     },
-    general: [{ type: mongoose.Schema.Types.ObjectId, ref: "General", required: true }]
+    general: [{ type: mongoose.Schema.Types.ObjectId, ref: "General" }]
   },
   { versionKey: false }
 );
