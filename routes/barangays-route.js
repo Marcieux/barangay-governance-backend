@@ -40,9 +40,9 @@ router.put("/:id", async (req, res) => {
 
 router.put("/:id/prince", async (req, res) => {
   const { id } = req.params;
-  const { prince } = req.body;
+  const { prince_id } = req.body;
 
-  if (!Array.isArray(prince) || prince.length === 0) {
+  if (!Array.isArray(prince_id) || prince_id.length === 0) {
     return res
       .status(400)
       .json({ message: "Princes array is required and cannot be empty." });
@@ -51,7 +51,7 @@ router.put("/:id/prince", async (req, res) => {
   try {
     const updatedBarangay = await Barangay.findByIdAndUpdate(
       id,
-      { $addToSet: { prince: { $each: prince } } },
+      { $addToSet: { prince_id: { $each: prince_id } } },
       { new: true }
     );
 
