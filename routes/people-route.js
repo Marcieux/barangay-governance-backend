@@ -36,6 +36,28 @@ router.get("/generals", async (req, res) => {
   }
 });
 
+router.get("/princes", async (req, res) => {
+  try {
+    const { barangay } = req.query;
+
+    if (!barangay) {
+      return res.status(400).json({ message: "Barangay name is required" });
+    }
+
+    const princeCount = await People.countDocuments({
+      barangay_name: { $regex: new RegExp(`^${barangay}$`, "i") },
+      role: "prince",
+    });
+
+    res.json({ count: princeCount });
+  } catch (err) {
+    console.error("Error fetching prince count:", err);
+    res
+      .status(500)
+      .json({ message: "Failed to fetch prince count", error: err.message });
+  }
+});
+
 router.put("/:id", async (req, res) => {
   try {
     const { id } = req.params;
