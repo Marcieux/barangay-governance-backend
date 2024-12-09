@@ -14,6 +14,26 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.get("/:id", async (req, res) => {
+  try {
+    const { id } = req.params; // Extract the ID from the request parameters
+    // Find the person by ID
+    const person = await People.findById(id);
+
+    if (!person) {
+      return res.status(404).json({ message: "Person not found" });
+    }
+
+    // Respond with the found person
+    res.json(person);
+  } catch (err) {
+    console.error("Error retrieving person:", err);
+    res
+      .status(500)
+      .json({ message: "Failed to retrieve person", error: err.message });
+  }
+});
+
 router.get("/generals", async (req, res) => {
   try {
     const { barangay } = req.query;
