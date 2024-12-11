@@ -31,8 +31,30 @@ router.get("/:prince_id", async (req, res) => {
   }
 });
 
+router.put("/:prince_id", async (req, res) => {
+  const { prince_id } = req.params;
+  const updatedData = req.body;
+
+  try {
+    const updatedPrince = await Prince.findOneAndUpdate(
+      { prince_id },
+      updatedData,
+      { new: true }
+    );
+
+    if (!updatedPrince) {
+      return res.status(404).json({ message: "Prince not found" });
+    }
+
+    res.json(updatedPrince);
+  } catch (err) {
+    console.error("Error updating prince:", err);
+    res.status(500).json({ message: "Failed to update prince", error: err.message });
+  }
+});
+
 router.post("/", async (req, res) => {
-  const { prince_id, prince_name, barangay_name, barangay_id, king_id } = req.body;
+  const { prince_id, prince_name, barangay_name, barangay_id, king_id, king_name, precinct, purok } = req.body;
 
   try {
     const newPrince = new Prince({
@@ -41,6 +63,9 @@ router.post("/", async (req, res) => {
       barangay_name,
       barangay_id,
       king_id,
+      king_name,
+      precinct,
+      purok
     });
 
     await newPrince.save();
