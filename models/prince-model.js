@@ -11,6 +11,12 @@ const princeSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    precinct: {
+      type: String,
+    },
+    purok: {
+      type: String,
+    },
     barangay_name: {
       type: String,
       required: true,
@@ -23,6 +29,10 @@ const princeSchema = new mongoose.Schema(
     king_id: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
+    },
+    king_name: { 
+      type: String, 
+      default: null 
     },
     general: [{ type: mongoose.Schema.Types.ObjectId, ref: "General" }]
   },
