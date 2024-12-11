@@ -4,13 +4,35 @@ import { People } from "../models/people-model.js";
 const router = express.Router();
 router.get("/", async (req, res) => {
   try {
-    const people = await People.find();
+    const { barangay_id } = req.query;
+    const query = barangay_id ? { barangay_id } : {};
+    const people = await People.find(query);
     res.json(people);
   } catch (err) {
     console.error("Error retrieving people:", err);
-    res
-      .status(500)
-      .json({ message: "Failed to retrieve people", error: err.message });
+    res.status(500).json({ message: "Failed to retrieve people" });
+  }
+});
+
+router.get("/by-barangay", async (req, res) => {
+  try {
+    const { barangay } = req.query;
+
+    if (!barangay) {
+      return res.status(400).json({ message: "Barangay name is required" });
+    }
+
+    const people = await People.find({
+      barangay_name: { $regex: new RegExp(`${barangay}`, "i") },
+    });
+
+    res.json(people);
+  } catch (err) {
+    console.error("Error fetching people by barangay:", err);
+    res.status(500).json({
+      message: "Failed to fetch people by barangay",
+      error: err.message,
+    });
   }
 });
 
