@@ -37,6 +37,10 @@ const peopleSchema = new mongoose.Schema({
     type: String,
     default: null,
   },
+  purok: {
+    type: String,
+    default: null,
+  },
   remarks: {
     type: String,
     default: null,
