@@ -11,6 +11,12 @@ const generalSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    precinct: {
+      type: String,
+    },
+    purok: {
+      type: String,
+    },
     barangay_id: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Barangay",
