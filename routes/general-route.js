@@ -16,11 +16,35 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.put("/:general_id", async (req, res) => {
+  const { general_id } = req.params;
+  const updatedData = req.body;
+
+  try {
+    const updatedGeneral = await General.findOneAndUpdate(
+      { general_id },
+      updatedData,
+      { new: true }
+    );
+
+    if (!updatedGeneral) {
+      return res.status(404).json({ message: "General not found" });
+    }
+
+    res.json(updatedGeneral);
+  } catch (err) {
+    console.error("Error updating general:", err);
+    res.status(500).json({ message: "Failed to update general", error: err.message });
+  }
+});
+
 // POST route to create or update a general
 router.post("/", async (req, res) => {
   const {
     general_id,
     general_name,
+    precinct,
+    purok,
     barangay_id,
     barangay_name,
     king_id,
@@ -35,6 +59,8 @@ router.post("/", async (req, res) => {
       { general_id }, // Match by general_id to either update or create
       {
         general_name,
+        precinct,
+        purok,
         barangay_name,
         barangay_id,
         king_id,
@@ -49,7 +75,7 @@ router.post("/", async (req, res) => {
     if (prince_id && updatedGeneral._id) {
       await Prince.findOneAndUpdate(
         { prince_id }, // Use prince_id explicitly
-        { $addToSet: { general: updatedGeneral._id } },
+        { $addToSet: { general: updatedGeneral.general_id } },
         { new: true }
       );
     }
