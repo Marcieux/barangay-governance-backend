@@ -34,7 +34,7 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-router.get("/generals", async (req, res) => {
+router.get("/generals/count", async (req, res) => {
   try {
     const { barangay } = req.query;
 
@@ -56,7 +56,7 @@ router.get("/generals", async (req, res) => {
   }
 });
 
-router.get("/princes", async (req, res) => {
+router.get("/princes/count", async (req, res) => {
   try {
     const { barangay } = req.query;
 
