@@ -16,6 +16,22 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.get("/:general_id", async (req, res) => {
+  const { general_id } = req.params;
+
+  try {
+    const general = await General.findOne({ general_id });
+
+    if (!general) {
+      return res.status(404).json({ message: "General not found" });
+    }
+    res.json(general);
+  } catch (err) {
+    console.error("Error retrieving general by general_id:", err);
+    res.status(500).json({ message: "Failed to retrieve general", error: err.message });
+  }
+});
+
 router.put("/:general_id", async (req, res) => {
   const { general_id } = req.params;
   const updatedData = req.body;
