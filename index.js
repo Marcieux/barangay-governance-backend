@@ -8,6 +8,7 @@ import peopleRoute from "./routes/people-route.js"
 import princeRoute from "./routes/prince-route.js"
 import generalRoute from "./routes/general-route.js"
 import loginRoute from "./routes/login-route.js"
+import leaderRoute from "./routes/leader-route.js"
 
 dotenv.config();
 
@@ -34,3 +35,4 @@ app.use("/people", peopleRoute);
 app.use("/prince", princeRoute);
 app.use("/general", generalRoute);
 app.use("/login", loginRoute);
+app.use("/leader", leaderRoute);
