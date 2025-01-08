@@ -43,6 +43,7 @@ const generalSchema = new mongoose.Schema(
       type: String, 
       required: true 
     },
+    leader: [{ type: mongoose.Schema.Types.ObjectId, ref: "Leader" }]
   },
   { versionKey: false }
 );
