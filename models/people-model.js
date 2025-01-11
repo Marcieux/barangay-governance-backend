@@ -9,7 +9,6 @@ const peopleSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-
   precinct: {
     type: String,
   },
@@ -19,6 +18,14 @@ const peopleSchema = new mongoose.Schema({
     default: null,
   },
   barangay_name: {
+    type: String,
+  },
+  referred_by_id: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "People",
+    default: null,
+  },
+  referred_by: {
     type: String,
   },
   functionary: {
