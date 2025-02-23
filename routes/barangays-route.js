@@ -1,5 +1,6 @@
 import express from "express";
 import { Barangay } from "../models/barangays-model.js";
+import { People } from "../models/people-model.js";
 
 const router = express.Router();
 router.get("/", async (req, res) => {
@@ -11,6 +12,67 @@ router.get("/", async (req, res) => {
     res
       .status(500)
       .json({ message: "Failed to retrieve barangays", error: err.message });
+  }
+});
+
+// Route to get targets by municipality
+router.get("/targets-by-municipality", async (req, res) => {
+  try {
+    const targets = await Barangay.aggregate([
+      {
+        $group: {
+          _id: "$municipality",
+          totalTarget: { $sum: "$target" }
+        }
+      }
+    ]);
+    res.json(targets);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// Route to get distinct municipalities
+router.get("/municipalities", async (req, res) => {
+  try {
+    // Use Mongoose's distinct method
+    const municipalities = await Barangay.distinct("municipality");
+    // Respond with the list of distinct municipalities
+    res.json({ municipalities });
+  } catch (err) {
+    console.error("Error retrieving municipalities:", err);
+    res.status(500).json({
+      message: "Failed to retrieve municipalities",
+      error: err.message,
+    });
+  }
+});
+
+// Get barangays by municipality
+router.get('/by-municipality/:municipality', async (req, res) => {
+  try {
+    const barangays = await Barangay.find({
+      municipality: req.params.municipality.toUpperCase(),
+    });
+
+    // Get total people count for each barangay
+    const peopleCounts = await People.aggregate([
+      { $match: { barangay_id: { $in: barangays.map(b => b._id) } } },
+      { $group: { _id: "$barangay_id", totalPeople: { $sum: 1 } } },
+    ]);
+
+    // Map total people counts to barangays
+    const barangaysWithCounts = barangays.map(barangay => {
+      const countData = peopleCounts.find(p => p._id.equals(barangay._id));
+      return {
+        ...barangay.toObject(),
+        totalPeople: countData ? countData.totalPeople : 0,
+      };
+    });
+    
+    res.json(barangaysWithCounts);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
 });
 

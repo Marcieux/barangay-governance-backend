@@ -23,12 +23,35 @@ router.get("/:general_id", async (req, res) => {
     const general = await General.findOne({ general_id });
 
     if (!general) {
-      return res.status(404).json({ message: "General not found" });
+      return res.status(404).json({
+        success: false,
+        error: { code: "GENERAL_NOT_FOUND", message: "Add the general first" },
+       });
     }
-    res.json(general);
+    res.json({ success: true, data: general });
   } catch (err) {
     console.error("Error retrieving general by general_id:", err);
-    res.status(500).json({ message: "Failed to retrieve general", error: err.message });
+    res.status(500).json({
+      success: false,
+      error: { code: "GENERAL_NOT_FOUND", message: "Failed to retrieve General" },
+    });
+  }
+});
+
+// Get the count of generals
+router.get("/stats/count", async (req, res) => {
+  const { barangay } = req.query;
+
+  if (!barangay) {
+    return res.status(400).json({ message: "Barangay name is required" });
+  }
+
+  try {
+    const generalCount = await General.countDocuments({  barangay_id: barangay });
+    res.json({ count: generalCount });
+  } catch (err) {
+    console.error("Error counting generals:", err);
+    res.status(500).json({ message: "Failed to count generals", error: err.message });
   }
 });
 
@@ -44,13 +67,19 @@ router.put("/:general_id", async (req, res) => {
     );
 
     if (!updatedGeneral) {
-      return res.status(404).json({ message: "General not found" });
+      return res.status(404).json({
+        success: false,
+        error: { code: "GENERAL_NOT_FOUND", message: "General not found" },
+       });
     }
 
-    res.json(updatedGeneral);
+    res.json({success: true, data: updatedGeneral  });
   } catch (err) {
     console.error("Error updating general:", err);
-    res.status(500).json({ message: "Failed to update general", error: err.message });
+    res.status(500).json({
+      success: false,
+      error: { code: "SERVER_ERROR", message: "Failed to update general" },
+    });
   }
 });
 

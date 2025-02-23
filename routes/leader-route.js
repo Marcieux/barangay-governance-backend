@@ -42,6 +42,23 @@ router.get("/:leader_id", async (req, res) => {
   }
 });
 
+// Get the count of leaders
+router.get("/stats/count", async (req, res) => {
+  const { barangay } = req.query;
+
+  if (!barangay) {
+    return res.status(400).json({ message: "Barangay name is required" });
+  }
+
+  try {
+    const leaderCount = await Leader.countDocuments({  barangay_id: barangay });
+    res.json({ count: leaderCount });
+  } catch (err) {
+    console.error("Error counting leaders:", err);
+    res.status(500).json({ message: "Failed to count leaders", error: err.message });
+  }
+});
+
 // Update a leader
 router.put("/:leader_id", async (req, res) => {
   const { leader_id } = req.params;
@@ -82,6 +99,8 @@ router.post("/", async (req, res) => {
     king_name,
     general_id,
     general_name,
+    prince_id,
+    prince_name,
   } = req.body;
 
   try {
@@ -97,6 +116,8 @@ router.post("/", async (req, res) => {
         king_name,
         general_id,
         general_name,
+        prince_id,
+        prince_name
       },
       { upsert: true, new: true }
     );

@@ -23,7 +23,7 @@ router.get("/by-barangay", async (req, res) => {
     }
 
     const people = await People.find({
-      barangay_name: { $regex: new RegExp(`${barangay}`, "i") },
+      barangay_id: barangay,
     });
 
     res.json(people);
@@ -33,6 +33,25 @@ router.get("/by-barangay", async (req, res) => {
       message: "Failed to fetch people by barangay",
       error: err.message,
     });
+  }
+});
+
+router.get("/roles-by-municipality", async (req, res) => {
+  try {
+    const counts = await People.aggregate([
+      {
+        $group: {
+          _id: "$municipality", // Group by municipality
+          totalPeople: { $sum: 1 }, // Count all people
+          peopleWithRoles: {
+            $sum: { $cond: [{ $and: [{ $ne: ["$role", null] }, { $ne: ["$role", ""], }] }, 1, 0] }, // Count people with roles, excludes null & empty values
+          },
+        },
+      },
+    ]);
+    res.json(counts);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
 });
 
@@ -53,50 +72,6 @@ router.get("/:id", async (req, res) => {
     res
       .status(500)
       .json({ message: "Failed to retrieve person", error: err.message });
-  }
-});
-
-router.get("/generals/count", async (req, res) => {
-  try {
-    const { barangay } = req.query;
-
-    if (!barangay) {
-      return res.status(400).json({ message: "Barangay name is required" });
-    }
-
-    const generalCount = await People.countDocuments({
-      barangay_name: { $regex: new RegExp(`^${barangay}$`, "i") },
-      role: "general",
-    });
-
-    res.json({ count: generalCount });
-  } catch (err) {
-    console.error("Error fetching generals count:", err);
-    res
-      .status(500)
-      .json({ message: "Failed to fetch generals count", error: err.message });
-  }
-});
-
-router.get("/princes/count", async (req, res) => {
-  try {
-    const { barangay } = req.query;
-
-    if (!barangay) {
-      return res.status(400).json({ message: "Barangay name is required" });
-    }
-
-    const princeCount = await People.countDocuments({
-      barangay_name: { $regex: new RegExp(`^${barangay}$`, "i") },
-      role: "prince",
-    });
-
-    res.json({ count: princeCount });
-  } catch (err) {
-    console.error("Error fetching prince count:", err);
-    res
-      .status(500)
-      .json({ message: "Failed to fetch prince count", error: err.message });
   }
 });
 

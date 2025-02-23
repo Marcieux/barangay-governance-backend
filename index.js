@@ -9,6 +9,7 @@ import princeRoute from "./routes/prince-route.js"
 import generalRoute from "./routes/general-route.js"
 import loginRoute from "./routes/login-route.js"
 import leaderRoute from "./routes/leader-route.js"
+import memberRoute from "./routes/member-route.js"
 
 dotenv.config();
 
@@ -26,7 +27,7 @@ app.listen(port, () => {
 });
 
 mongoose
-  .connect(process.env.MONGODB_URL)
+  .connect(process.env.MONGODB_URI)
   .then(() => console.log("CONNECTED TO MONGODB"))
   .catch((err) => console.error("Failed to connect to MongoDB:", err));
 
@@ -36,3 +37,4 @@ app.use("/prince", princeRoute);
 app.use("/general", generalRoute);
 app.use("/login", loginRoute);
 app.use("/leader", leaderRoute);
+app.use("/member", memberRoute);

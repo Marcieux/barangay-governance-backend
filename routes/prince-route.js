@@ -22,12 +22,35 @@ router.get("/:prince_id", async (req, res) => {
     const prince = await Prince.findOne({ prince_id });
 
     if (!prince) {
-      return res.status(404).json({ message: "Prince not found" });
+      return res.status(404).json({ 
+        success: false, 
+        error: {code: "PRINCE_NOT_FOUND", message: "Add the prince first"}
+       });
     }
-    res.json(prince);
+    res.json({success: true, data: prince });
   } catch (err) {
     console.error("Error retrieving prince by prince_id:", err);
-    res.status(500).json({ message: "Failed to retrieve prince", error: err.message });
+    res.status(500).json({
+      success: false,
+      error: { code: "SERVER_ERROR", message: "Failed to retrieve Prince" }
+     });
+  }
+});
+
+// Get the count of princes
+router.get("/stats/count", async (req, res) => {
+  const { barangay } = req.query;
+
+  if (!barangay) {
+    return res.status(400).json({ message: "Barangay name is required" });
+  }
+
+  try {
+    const princeCount = await Prince.countDocuments({ barangay_id: barangay });
+    res.json({ count: princeCount });
+  } catch (err) {
+    console.error("Error counting princes:", err);
+    res.status(500).json({ message: "Failed to count princes", error: err.message });
   }
 });
 
@@ -43,13 +66,18 @@ router.put("/:prince_id", async (req, res) => {
     );
 
     if (!updatedPrince) {
-      return res.status(404).json({ message: "Prince not found" });
+      return res.status(404).json({ 
+        success: false,
+        error: {code: "PRINCE_NOT_FOUND", message: "Prince not found"} });
     }
 
-    res.json(updatedPrince);
+    res.json({success: true, prince: updatedPrince  });
   } catch (err) {
     console.error("Error updating prince:", err);
-    res.status(500).json({ message: "Failed to update prince", error: err.message });
+    res.status(500).json({
+      success: false,
+      error: { code: "SERVER_ERROR", message: "Failed to update prince"}
+     });
   }
 });
 

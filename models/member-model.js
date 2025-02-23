@@ -1,13 +1,13 @@
 import mongoose from "mongoose";
 
-const leaderSchema = new mongoose.Schema(
+const memberSchema = new mongoose.Schema(
   {
-    leader_id: {
+    member_id: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "People",
       required: true,
     },
-    leader_name: {
+    member_name: {
       type: String,
       required: true,
     },
@@ -52,9 +52,17 @@ const leaderSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    member: [{ type: mongoose.Schema.Types.ObjectId, ref: "Member" }]
+    leader_id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Leader",
+      required: true,
+    },
+    leader_name: {
+      type: String,
+      required: true,
+    },
   },
   { versionKey: false }
 );
 
-export const Leader = mongoose.model("Leader", leaderSchema, "leader");
+export const Member = mongoose.model("Member", memberSchema, "member");
