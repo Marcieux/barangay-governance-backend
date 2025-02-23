@@ -21,7 +21,7 @@ app.get("/", (req, res) => {
   res.send("BACKEND IS CONNECTED!");
 });
 
-const port = process.env.PORT || 3001;
+const port = process.env.PORT;
 app.listen(port, () => {
   console.log(`App listening on port ${port}`);
 });
